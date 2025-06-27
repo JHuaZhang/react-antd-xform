@@ -1,6 +1,6 @@
 {
   "name": "react-antd-xform",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "基于mobx的form解决方案",
   "type": "module",
   "main": "./dist/index.js",
@@ -13,8 +13,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "sb dev -p 6006",
-    "build-storybook": "sb build",
-    "publish": "pnpm build && pnpm publish"
+    "build-storybook": "sb build"
   },
   "keywords": [],
   "author": "",
