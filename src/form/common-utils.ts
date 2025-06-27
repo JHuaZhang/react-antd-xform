@@ -94,3 +94,17 @@ export const range = (n: number) => {
   }
   return result;
 };
+
+export function pick<T extends object, K extends string>(
+  obj: T,
+  keys: K[]
+): { [P in K]?: P extends keyof T ? T[P] : never } {
+  const result: any = {};
+  keys.forEach(key => {
+    if (key in obj) {
+      result[key] = (obj as any)[key];
+    }
+  });
+  return result;
+}
+

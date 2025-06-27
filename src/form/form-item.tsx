@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect } from 'react';
 import cx from 'classnames';
-import pick from 'lodash/pick';
+import { pick } from '../form/common-utils';
 import { observer } from 'mobx-react-lite';
 import stringifyObject from 'stringify-object';
 import { reaction, runInAction, toJS } from 'mobx';

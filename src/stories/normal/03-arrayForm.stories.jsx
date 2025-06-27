@@ -1,7 +1,8 @@
 import { Button } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { Form, FormItem, FormModel, ValuePreview, arrayHelpers } from '../../index';
+import { Form, FormItem, FormModel, arrayHelpers } from '../../index';
 import AppendButton from '../components/AppendButton';
+import { ValuePreview } from '../components/ValuePreview';
 
 export default {
   title: 'XForm/基本用法',
