@@ -8,7 +8,7 @@ import { CheckConfig, FormProps, FormArrayProps, FormArrayLayoutInput } from './
 import { FormEnvProvider } from './context/formEnvContext';
 import { ModelProvider } from './context/modelContext';
 import { FormLayout } from './layout';
-import { FormSubmit } from '../form-ui/default-button';
+import { FormSubmit } from './form-submit';
 import { useModel } from './context/modelContext';
 import { arrayHelpers } from './array-helper';
 

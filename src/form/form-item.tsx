@@ -1,10 +1,10 @@
 import React, { useEffect, useLayoutEffect } from 'react';
 import cx from 'classnames';
-import { pick } from '../form/common-utils';
 import { observer } from 'mobx-react-lite';
 import stringifyObject from 'stringify-object';
 import { reaction, runInAction, toJS } from 'mobx';
 import { FieldType } from './enum';
+import { pick } from './common-utils';
 import { Field, FormModel } from './model';
 import { useModel } from './context/modelContext';
 import { useFormEnv } from './context/formEnvContext';
@@ -131,7 +131,7 @@ export function createFormItem(inputOptions: FormItemCreationOptions) {
       id: htmlId,
       ...(isPreview ? { isPreview: true } : null),
       // dataSource, readOnly, disabled,options 允许直接透传
-      ...pick(props, ['dataSource', 'readOnly', 'disabled', 'options']),
+      ...pick(props, ['dataSource', 'readOnly', 'disabled','options']),
       ...componentPropsProp,
       // status 优先用 prop 中的值，然后再根据 error 自动判断
       [options.statusPropName]: composeValue(

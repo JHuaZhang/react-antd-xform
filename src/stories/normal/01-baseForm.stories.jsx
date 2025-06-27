@@ -1,3 +1,4 @@
+import { Button } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { Form, FormItem, FormModel } from '../../index';
 import { SyntaxCodeBlock } from '../components/SyntaxCodeBlock';
@@ -12,7 +13,7 @@ export default {
 
 const ObservableFormExample = observer(() => {
   const model = new FormModel({
-    name: '张三',
+    name: '',
     introduce: '我是张三，我来自湖北',
   });
   return (
@@ -116,6 +117,9 @@ const ObservableFormExample = observer(() => {
             name="switch"
             required
           />
+          <Form.Submit ButtonComponent={Button} type="primary">
+            提交
+          </Form.Submit>
           <ValuePreview defaultShow={true} />
         </Form>
       </div>
