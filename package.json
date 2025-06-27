@@ -13,7 +13,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "sb dev -p 6006",
-    "build-storybook": "sb build"
+    "build-storybook": "sb build",
+    "publish": "pnpm build && pnpm publish"
   },
   "keywords": [],
   "author": "",
