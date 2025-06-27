@@ -120,6 +120,7 @@ const ObservableFormExample = observer(() => {
           <Form.Submit ButtonComponent={Button} type="primary">
             提交
           </Form.Submit>
+          <Form.FormReset ButtonComponent={Button}>重置</Form.FormReset>
           <ValuePreview defaultShow={true} />
         </Form>
       </div>

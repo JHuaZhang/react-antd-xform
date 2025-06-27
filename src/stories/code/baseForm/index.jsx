@@ -1,5 +1,4 @@
 import { Form, FormItem, FormModel } from 'react-antd-xform';
-import ValuePreview from '../../components/ValuePreview'
 import { observer } from 'mobx-react-lite';
 
 export const BaseForm = observer(() => {
@@ -7,8 +6,11 @@ export const BaseForm = observer(() => {
     name: '张三',
     introduce: '我是张三，我来自湖北',
   });
+  const onSubmit = (values) => {
+    console.log(values);
+  };
   return (
-    <Form model={model} onSubmit={(values) => console.log(values)}>
+    <Form model={model} onSubmit={onSubmit}>
       <FormItem component="input" label="姓名" name="name" required />
       <FormItem
         component="textArea"
@@ -105,7 +107,6 @@ export const BaseForm = observer(() => {
         name="switch"
         required
       />
-      <ValuePreview defaultShow={true} />
     </Form>
   );
 });
