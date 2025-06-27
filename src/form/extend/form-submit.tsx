@@ -1,7 +1,7 @@
 import { ComponentType } from 'react';
-import { useModel } from './context/modelContext';
-import { useFormEnv } from './context/formEnvContext';
-import { modelUtils } from './model-utils';
+import { modelUtils } from '../model-utils';
+import { useModel } from '../context/modelContext';
+import { useFormEnv } from '../context/formEnvContext';
 
 type FormSubmitProps<T extends object = {}> = {
   /** 必须传入的按钮组件 */

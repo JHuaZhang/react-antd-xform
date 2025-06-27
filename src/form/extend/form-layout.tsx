@@ -1,8 +1,8 @@
 import cx from 'classnames';
 import styled from 'styled-components';
-import { FormLayoutProps, FormItemGroupProps } from './type';
-import { asCSSLength } from './common-utils';
-import { useFormEnv } from './context/formEnvContext';
+import { asCSSLength } from '../common-utils';
+import { useFormEnv } from '../context/formEnvContext';
+import { FormLayoutProps, FormItemGroupProps } from '../type';
 
 const FormLayoutContainer = styled.div`
   --label-width: auto;

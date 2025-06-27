@@ -1,16 +1,17 @@
-import { IEqualsComparer, reaction, toJS } from 'mobx';
-import { observer } from 'mobx-react-lite';
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { AsyncValue } from '../helpers/AsyncValue';
-import { Check, Field, FormModel } from './model';
-import { composeValue, useHtmlIdPrefix, range } from './common-utils';
-import { CheckConfig, FormProps, FormArrayProps, FormArrayLayoutInput } from './type';
-import { FormEnvProvider } from './context/formEnvContext';
+import React, { useState } from 'react';
+import { FormProps } from './type';
+import { FormModel } from './model';
+import { FormItemView } from './form-item';
 import { ModelProvider } from './context/modelContext';
-import { FormLayout } from './layout';
-import { FormSubmit } from './form-submit';
-import { useModel } from './context/modelContext';
-import { arrayHelpers } from './array-helper';
+import { FormEnvProvider } from './context/formEnvContext';
+import { composeValue, useHtmlIdPrefix } from './common-utils';
+import { FormArray } from './extend/form-array';
+import { FormCheck } from './extend/form-check';
+import { FormLayout } from './extend/form-layout';
+import { FormSubmit } from './extend/form-submit';
+import { FormEffect } from './extend/form-effect';
+import { FormObject } from './extend/form-object';
+import { FormModelConsumer } from './extend/form-model-consumer';
 
 export function Form({
   model: modelProp,
@@ -38,59 +39,12 @@ export function Form({
   );
 }
 
-const FormModelConsumer = observer(({ children }: React.ConsumerProps<FormModel<any>>) => {
-  const model = useModel();
-  return children(model) as React.ReactElement;
-});
-
-/** 默认的数组布局 */
-const defaultArrayLayout = ({ arrayModel, itemContent, itemCount }: FormArrayLayoutInput) => {
-  return range(itemCount).map((itemIndex) =>
-    arrayHelpers.renderArrayItem(arrayModel, itemIndex, itemContent)
-  );
-};
-
-/** 对象数组表单 */
-const FormArray = observer(
-  <T extends any>({
-    name,
-    children,
-    layout,
-    arrayModel: arrayModelProp,
-    use,
-  }: FormArrayProps<T>) => {
-    const parent = useModel();
-    if (use === false) {
-      return null;
-    }
-    const arrayModel =
-      arrayModelProp ?? ((name === '&' ? parent : parent.getSubModel(name)) as FormModel<T[]>);
-    const itemCount = arrayModel.values?.length ?? 0;
-    const itemContent: any = typeof children === 'function' ? children : () => children;
-
-    return (
-      <ModelProvider value={arrayModel as FormModel<unknown[]>}>
-        {(layout ?? defaultArrayLayout)({ arrayModel, itemCount, itemContent })}
-      </ModelProvider>
-    );
-  }
-);
-
-/** 为该组件下的 XFormField 添加一个数据字段前缀 */
-const FormObject = observer(
-  ({ name, children, use }: { children: React.ReactNode; name: string; use?: boolean }) => {
-    const parent = useModel();
-    if (use === false) {
-      return null;
-    }
-
-    const model = (name === '&' ? parent : parent.getSubModel(name)) as FormModel;
-    return <ModelProvider value={model} children={children} />;
-  }
-);
-
-Form.Submit = FormSubmit;
-Form.ModelConsumer = FormModelConsumer;
-Form.ModelProvider = ModelProvider;
 Form.Array = FormArray;
+Form.Check = FormCheck;
+Form.Effect = FormEffect;
 Form.Object = FormObject;
+Form.Submit = FormSubmit;
+Form.Layout = FormLayout;
+Form.ItemView = FormItemView;
+Form.ModelProvider = ModelProvider;
+Form.ModelConsumer = FormModelConsumer;

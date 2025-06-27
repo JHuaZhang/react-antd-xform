@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Field, FormModel } from './model';
 import { FieldType, ModelType } from './enum';
+import { AsyncValue } from './helpers/AsyncValue';
 
 type valueOf<T> = T[keyof T];
 
@@ -320,12 +321,10 @@ export interface FormArrayLayoutInput {
   itemContent(itemIndex: number, itemModel: FormModel<any>): React.ReactNode;
 }
 
-export interface FormArrayProps<T> {
-  use?: boolean;
-  arrayModel?: FormModel<T[]>;
-  name?: string;
-  layout?(input: FormArrayLayoutInput): React.ReactElement;
-  children?:
-    | React.ReactNode
-    | ((index: number, model: FormModel<T>) => React.ReactNode);
-}
+export type Watchable<T = any> =
+  | (() => T)
+  | string
+  | Field<T>
+  | FormModel<T>
+  | AsyncValue<T>
+  | Array<string | Field | AsyncValue<any> | FormModel<any>>;

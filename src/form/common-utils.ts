@@ -1,5 +1,10 @@
 import { useState } from 'react';
 import * as mobx from 'mobx';
+import { Watchable } from './type';
+import { FormModel } from './model';
+import { toJS } from 'mobx';
+import { Field } from './model';
+import { AsyncValue } from './helpers/AsyncValue';
 
 function isNumericKey(key: string) {
   return String(Number.parseInt(key)) === key;
@@ -100,10 +105,40 @@ export function pick<T extends object, K extends string>(
   keys: K[]
 ): { [P in K]?: P extends keyof T ? T[P] : never } {
   const result: any = {};
-  keys.forEach(key => {
+  keys.forEach((key) => {
     if (key in obj) {
       result[key] = (obj as any)[key];
     }
   });
   return result;
+}
+
+export function convertWatchableToExpression(watch: Watchable, model: FormModel<any>) {
+  if (typeof watch === 'string') {
+    return () => toJS(model.getValue(watch));
+  } else if (typeof watch === 'function') {
+    return watch;
+  } else if (watch instanceof Field) {
+    return () => watch.value;
+  } else if (watch instanceof FormModel) {
+    return () => toJS(watch.values);
+  } else if (watch instanceof AsyncValue) {
+    return () => watch.current;
+  } else if (Array.isArray(watch)) {
+    return () => {
+      return watch.map((t) => {
+        if (typeof t === 'string') {
+          return toJS(model.getValue(t));
+        } else if (t instanceof AsyncValue) {
+          return t.current;
+        } else if (t instanceof Field) {
+          return t.value;
+        } else if (t instanceof FormModel) {
+          return toJS(t.values);
+        }
+      }) as any;
+    };
+  } else {
+    console.warn('[xform] 无法识别的 watch 参数', watch);
+  }
 }
