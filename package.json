@@ -1,6 +1,6 @@
 {
   "name": "react-antd-xform",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "基于mobx的form解决方案",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,7 +15,13 @@
     "dev": "sb dev -p 6006",
     "build-storybook": "sb build"
   },
- "keywords": ["form", "antd", "react","mobx","react-antd-xform"],
+  "keywords": [
+    "form",
+    "antd",
+    "react",
+    "mobx",
+    "react-antd-xform"
+  ],
   "author": "",
   "license": "MIT",
   "packageManager": "pnpm@10.12.1",
@@ -24,6 +30,7 @@
     "@types/stringify-object": "^4.0.5",
     "antd": "^5.26.2",
     "classnames": "^2.5.1",
+    "dayjs": "^1.11.18",
     "invariant": "^2.2.4",
     "mobx": "^6.13.7",
     "mobx-react-lite": "^4.1.0",

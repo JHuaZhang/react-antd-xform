@@ -1,5 +1,23 @@
-import { Input, Select, Radio, Checkbox, InputNumber, Slider, Switch } from 'antd';
-import { isEmptyValue, withValueChangeHandler } from './common-utils';
+import {
+  Input,
+  Select,
+  Radio,
+  Checkbox,
+  InputNumber,
+  Slider,
+  Switch,
+  DatePicker,
+  TimePicker,
+} from 'antd';
+import {
+  isEmptyValue,
+  withValueChangeHandler,
+  withInjectedProps,
+  withDayjsTransformAntdDate,
+  withDayjsTransformAntdDateRangePicker,
+  withDayjsTransformAntdTime,
+  withDayjsTransformAntdTimeRange,
+} from './common-utils';
 import { FormItemCreationOptions } from '../form/type';
 
 export const ALL_COMPONENTS: FormItemCreationOptions[] = [
@@ -21,6 +39,20 @@ export const ALL_COMPONENTS: FormItemCreationOptions[] = [
     name: 'select',
     component: Select,
     defaultValue: '',
+    isEmpty: isEmptyValue,
+    hasIntrinsicWidth: false,
+  },
+  {
+    name: 'singleSelect',
+    component: Select,
+    defaultValue: '',
+    isEmpty: isEmptyValue,
+    hasIntrinsicWidth: false,
+  },
+  {
+    name: 'multiSelect',
+    component: withInjectedProps({ mode: 'multiple' })(Select),
+    defaultValue: [],
     isEmpty: isEmptyValue,
     hasIntrinsicWidth: false,
   },
@@ -55,6 +87,34 @@ export const ALL_COMPONENTS: FormItemCreationOptions[] = [
   {
     name: 'switch',
     component: Switch,
+    defaultValue: false,
+    isEmpty: isEmptyValue,
+    hasIntrinsicWidth: false,
+  },
+  {
+    name: 'datePicker',
+    component: withDayjsTransformAntdDate(DatePicker),
+    defaultValue: false,
+    isEmpty: isEmptyValue,
+    hasIntrinsicWidth: false,
+  },
+  {
+    name: 'dateRangePicker',
+    component: withDayjsTransformAntdDateRangePicker(DatePicker.RangePicker),
+    defaultValue: false,
+    isEmpty: isEmptyValue,
+    hasIntrinsicWidth: false,
+  },
+  {
+    name: 'timePicker',
+    component: withDayjsTransformAntdTime(TimePicker),
+    defaultValue: false,
+    isEmpty: isEmptyValue,
+    hasIntrinsicWidth: false,
+  },
+  {
+    name: 'timeRangePickerPicker',
+    component: withDayjsTransformAntdTimeRange(TimePicker.RangePicker),
     defaultValue: false,
     isEmpty: isEmptyValue,
     hasIntrinsicWidth: false,

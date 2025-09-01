@@ -1,9 +1,10 @@
-import { Button } from 'antd';
+import { Button,ConfigProvider } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { Form, FormItem, FormModel } from '../../index';
 import { SyntaxCodeBlock } from '../components/SyntaxCodeBlock';
 import { ValuePreview } from '../components/ValuePreview';
 import code from '../code/baseForm/index.jsx?raw';
+import zhCN from 'antd/es/locale/zh_CN'; 
 import '../index.css';
 
 export default {
@@ -15,9 +16,10 @@ const ObservableFormExample = observer(() => {
   const model = new FormModel({
     name: '',
     introduce: '我是张三，我来自湖北',
+    date: '2025-09-17',
   });
   return (
-    <div>
+    <ConfigProvider locale={zhCN}>
       <div className="title">基本用法</div>
       <div className="container">
         <Form model={model} onSubmit={(values) => console.log(values)}>
@@ -48,7 +50,7 @@ const ObservableFormExample = observer(() => {
           />
           <FormItem
             defaultValue={['book']}
-            component="select"
+            component="multiSelect"
             label="爱好"
             options={[
               { value: 'book', label: '读书' },
@@ -117,6 +119,48 @@ const ObservableFormExample = observer(() => {
             name="switch"
             required
           />
+          <FormItem
+            component="datePicker"
+            writeDefaultValueToModel={true}
+            label="日期"
+            name="date"
+            componentProps={{
+              style: { width: '100%' },
+              picker: 'date',
+            }}
+            required
+          />
+          <FormItem
+            component="dateRangePicker"
+            writeDefaultValueToModel={true}
+            label="日期区间"
+            name="dateRange"
+            componentProps={{
+              style: { width: '100%' },
+               picker: 'date',
+            }}
+            required
+          />
+          <FormItem
+            component="timePicker"
+            writeDefaultValueToModel={true}
+            label="时间"
+            name="time"
+            componentProps={{
+              style: { width: '100%' },
+            }}
+            required
+          />
+          <FormItem
+            component="timeRangePickerPicker"
+            writeDefaultValueToModel={true}
+            label="时间区间"
+            name="timeRange"
+            componentProps={{
+              style: { width: '100%' },
+            }}
+            required
+          />
           <Form.Submit ButtonComponent={Button} type="primary">
             提交
           </Form.Submit>
@@ -126,7 +170,7 @@ const ObservableFormExample = observer(() => {
       </div>
       <div className="title">源码内容</div>
       <SyntaxCodeBlock code={code} language="jsx" />
-    </div>
+    </ConfigProvider>
   );
 });
 
