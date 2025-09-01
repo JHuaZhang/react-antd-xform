@@ -22,7 +22,7 @@ const ObservableFormExample = observer(() => {
     <ConfigProvider locale={zhCN}>
       <div className="title">基本用法</div>
       <div className="container">
-        <Form model={model} onSubmit={(values) => console.log(values)}>
+        <Form model={model} writeDefaultValueToModel='force' onSubmit={(values) => console.log(values)}>
           <FormItem component="input" label="姓名" name="name" required />
           <FormItem
             component="textArea"
@@ -41,7 +41,6 @@ const ObservableFormExample = observer(() => {
               { value: 'Yiminghe', label: 'yiminghe' },
               { value: 'disabled', label: 'Disabled', disabled: true },
             ]}
-            writeDefaultValueToModel={true}
             name="friend"
             required
             componentProps={{
@@ -57,7 +56,6 @@ const ObservableFormExample = observer(() => {
               { value: 'study', label: '学习' },
               { value: 'disabled', label: 'Disabled', disabled: true },
             ]}
-            writeDefaultValueToModel={true}
             name="likes"
             required
             componentProps={{
@@ -74,14 +72,12 @@ const ObservableFormExample = observer(() => {
               { value: 'female', label: '女' },
             ]}
             defaultValue="male"
-            writeDefaultValueToModel={true}
             name="gender"
             required
           />
           <FormItem
             component="checkbox"
             defaultValue={['apple']}
-            writeDefaultValueToModel={true}
             label="喜欢的水果"
             labelStyle={{ marginTop: -4 }}
             options={[
@@ -94,7 +90,6 @@ const ObservableFormExample = observer(() => {
           <FormItem
             component="inputNumber"
             defaultValue={1}
-            writeDefaultValueToModel={true}
             label="折扣"
             name="numbers"
             required
@@ -106,7 +101,6 @@ const ObservableFormExample = observer(() => {
           <FormItem
             component="slider"
             defaultValue={80}
-            writeDefaultValueToModel={true}
             label="进度条"
             name="slider"
             required
@@ -114,14 +108,12 @@ const ObservableFormExample = observer(() => {
           <FormItem
             component="switch"
             defaultValue={true}
-            writeDefaultValueToModel={true}
             label="开关"
             name="switch"
             required
           />
           <FormItem
             component="datePicker"
-            writeDefaultValueToModel={true}
             label="日期"
             name="date"
             componentProps={{
@@ -132,7 +124,6 @@ const ObservableFormExample = observer(() => {
           />
           <FormItem
             component="dateRangePicker"
-            writeDefaultValueToModel={true}
             label="日期区间"
             name="dateRange"
             componentProps={{
@@ -143,7 +134,6 @@ const ObservableFormExample = observer(() => {
           />
           <FormItem
             component="timePicker"
-            writeDefaultValueToModel={true}
             label="时间"
             name="time"
             componentProps={{
@@ -153,7 +143,6 @@ const ObservableFormExample = observer(() => {
           />
           <FormItem
             component="timeRangePickerPicker"
-            writeDefaultValueToModel={true}
             label="时间区间"
             name="timeRange"
             componentProps={{
