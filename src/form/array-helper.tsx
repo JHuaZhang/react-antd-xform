@@ -1,9 +1,9 @@
-import { action } from 'mobx';
+/* eslint-disable eqeqeq */
 import invariant from 'invariant';
-import { Form } from './index';
-import { FormModel } from './model';
+import { action } from 'mobx';
 import { composeValue } from './common-utils';
-import { FormArrayLayoutInput } from './type';
+import { Form, FormArrayLayoutInput } from './form';
+import { FormModel } from './model';
 
 function invariantArrayShapeIsAutoOrArray(arrayModel: FormModel<unknown[]>) {
   invariant(

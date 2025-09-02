@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
-    "module": "ES2015",
-    "moduleResolution": "node",
-    "jsx": "react-jsx",
-    "esModuleInterop": true,
-    "baseUrl": "./",
+    "target": "ES2019",
+    "module": "esnext",
     "declaration": true,
-    "declarationDir": "dist/types", // 指定声明文件输出目录
-    "outDir": "dist", // 添加输出目录
-    "lib": ["es2017", "dom"],
-    "skipLibCheck": true,
-    "allowJs": true,
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "suppressExcessPropertyErrors": true,
     "allowSyntheticDefaultImports": true,
-    "noImplicitAny": false,
-    "resolveJsonModule": true,
-    "types": ["react", "react-dom", "mobx"] // 明确依赖的类型
+    "strictNullChecks": false,
+    "allowJs": true,
+    "jsx": "react",
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@@/*": [".dumi/tmp/*"],
+      "react-form": ["react-form/src"],
+      "react-form/*": ["react-form/src/*", "*"]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "dist", // 排除输出目录
-    "**/__tests__/**",
-    "**/*.stories.tsx"
-  ]
+  "include": [".dumirc.ts", "react-form/src/**/*"]
 }

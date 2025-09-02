@@ -1,0 +1,1 @@
+export { composeValue } from './dataHandle';

@@ -1,42 +1,122 @@
 import invariant from 'invariant';
 import { action, computed, makeObservable, observable, toJS } from 'mobx';
-import { ModelType, FieldType } from './enum';
+import React from 'react';
 import {
-  splitToPath,
   composeValue,
+  keyToValueShape,
   observableGetIn,
   observableSetIn,
-  keyToValueShape,
+  splitToPath,
 } from './common-utils';
-import {
-  XName,
-  ResolveXName,
-  ValueShape,
-  FieldConfig,
-  CheckConfig,
-  FieldState,
-  FieldCreateOptions,
-  FieldValidateTrigger,
-  FormModelCreateOptions,
-} from './type';
 
-const EMPTY_PATH = [] as string[];
+type valueOf<T> = T[keyof T];
+
+export type XName<D> =
+  // 只有 D 为 any 的情况下这个判断才会成立
+  0 extends D & 1
+    ? any
+    : D extends (infer U)[]
+    ? number | `${number}` | `${number}.${XName<U>}`
+    : D extends object
+    ? valueOf<{ [K in keyof D & string]: K | `${K}.${XName<D[K]>}` }>
+    : never;
+
+type IfAny<T, TRUE, FALSE> = 0 extends T & 1 ? TRUE : FALSE;
+
+type ResolveXName<D, Path extends string | number> =
+  // 只有 Path 为 any 的情况下这个判断才会成立
+  // 这里这么做是为了将 any 传染出去，不然会变成「any 进来，unknown 出去」
+  0 extends Path & 1
+    ? any
+    : string extends Path
+    ? IfAny<D, any, unknown>
+    : Path extends number
+    ? D extends Array<infer U>
+      ? U
+      : unknown
+    : Path extends keyof D
+    ? D[Path]
+    : Path extends `${infer K}.${infer R}`
+    ? K extends keyof D
+      ? ResolveXName<D[K], R>
+      : unknown
+    : unknown;
+
+export type ValueShape = 'array' | 'object';
+
+export type FieldValidateTrigger = '*' | 'blur' | 'change' | 'mount';
+
+export interface FieldConfig<D> {
+  htmlId?: string;
+  label?: React.ReactNode;
+  help?: React.ReactNode;
+  tip?: React.ReactNode;
+  asterisk?: boolean;
+
+  afterChange?(...args: any[]): void;
+
+  /** 覆盖 FormItem 上的错误信息 */
+  error?: React.ReactNode;
+
+  /** 在 `<FormItem />` 上设置的 props.value（也可能是 props.checked，取决于组件类型） */
+  valueProp?: any;
+
+  defaultValue?: any;
+  /** 在 `<FormItem />` 上设置的 props.defaultValue */
+  defaultValueProp?: any;
+  isEmpty?(value: any): boolean;
+  required?: boolean;
+  requiredMessage?: string;
+  writeDefaultValueToModel?: boolean | 'force';
+  autoUnmount?: boolean;
+
+  validate?(
+    value: any,
+    field: Field<D>,
+    trigger: FieldValidateTrigger,
+  ): undefined | null | string | Promise<any>;
+  validateOnMount?: boolean;
+  validateOnChange?: boolean;
+  validateOnBlur?: boolean;
+
+  disabled?: boolean;
+  readOnly?: boolean;
+  status?: string;
+
+  // 其他更多字段由上层自定义（TS 层面可以使用 interface merge）
+}
+
+enum ModelType {
+  rootModel = 'rootModel',
+  subModel = 'subModel',
+}
+
+type FormModelCreateOptions =
+  | { modelType: ModelType.rootModel }
+  | { modelType: ModelType.subModel; parent: FormModel; name: string };
+
 const ROOT_MODEL_CREATE_OPTIONS: FormModelCreateOptions = {
   modelType: ModelType.rootModel,
 };
 
+const EMPTY_PATH = [] as string[];
+
 class IdGenerator {
   private _nextId = 1;
   private prefix: string;
+
   constructor(prefix: string) {
     this.prefix = prefix;
   }
+
   getNextId() {
     return `${this.prefix}_${this._nextId++}`;
   }
 }
 
-export class FormModel<D extends { [key: string]: any } = unknown> implements FormModel<D> {
+export class FormModel<D extends { [key: string]: any } = unknown>
+  implements FormModel<D>
+{
   _modelIdGenerator: IdGenerator;
   _fieldIdGenerator: IdGenerator;
 
@@ -71,14 +151,16 @@ export class FormModel<D extends { [key: string]: any } = unknown> implements Fo
   set values(nextValues: D) {
     if (this.isDeleted) {
       console.warn(
-        '[xform] 对已删除的 Model 进行赋值将被忽略。请不要对已删除的 Model/Field 进行操作。'
+        '[xform] 对已删除的 Model 进行赋值将被忽略。请不要对已删除的 Model/Field 进行操作。',
       );
       return;
     }
 
     if (this._modelType === ModelType.rootModel) {
       if (nextValues == null) {
-        console.warn('[xform] FormModel 根节点的 values 不能设置为 null/undefined');
+        console.warn(
+          '[xform] FormModel 根节点的 values 不能设置为 null/undefined',
+        );
       }
       this._values = nextValues;
     } else {
@@ -133,18 +215,21 @@ export class FormModel<D extends { [key: string]: any } = unknown> implements Fo
         isDeleted: computed,
         _markDeleted: action,
       },
-      { name: `${this.id}(${this.name})` }
+      { name: `${this.id}(${this.name})` },
     );
   }
 
-  getValue<N extends XName<D>>(name: N, defaultValue?: ResolveXName<D, N>): ResolveXName<D, N> {
+  getValue<N extends XName<D>>(
+    name: N,
+    defaultValue?: ResolveXName<D, N>,
+  ): ResolveXName<D, N> {
     return observableGetIn(this.values, String(name), defaultValue);
   }
 
   setValue<N extends XName<D>>(name: N, value: ResolveXName<D, N>) {
     if (this.isDeleted) {
       console.warn(
-        '[xform] 对已删除的 Model 进行赋值将被忽略。请不要对已删除的 Model/Field 进行操作。'
+        '[xform] 对已删除的 Model 进行赋值将被忽略。请不要对已删除的 Model/Field 进行操作。',
       );
       return;
     }
@@ -153,10 +238,12 @@ export class FormModel<D extends { [key: string]: any } = unknown> implements Fo
       this._updateValueShape(keyToValueShape(splitToPath(String(name))[0]));
       this.values = (this._valueShape === 'array' ? [] : {}) as D;
     }
-    observableSetIn(this.values, name as string, value);
+    observableSetIn(this.values, name, value);
   }
 
-  getSubModel<N extends XName<D>>(name: N | string[]): FormModel<ResolveXName<D, N>> {
+  getSubModel<N extends XName<D>>(
+    name: N | string[],
+  ): FormModel<ResolveXName<D, N>> {
     const path = Array.isArray(name) ? name : splitToPath(name);
     let mod: FormModel = this;
     for (let i = 0; i < path.length - 1; i++) {
@@ -213,7 +300,9 @@ export class FormModel<D extends { [key: string]: any } = unknown> implements Fo
 
   _asField() {
     if (this._modelType === ModelType.rootModel) {
-      throw new Error('[xform] 根节点下不支持使用 name=&。根节点的数据结构只能为普通对象。');
+      throw new Error(
+        '[xform] 根节点下不支持使用 name=&。根节点的数据结构只能为普通对象。',
+      );
     }
     return this.parent.getField(this.name) as Field<D>;
   }
@@ -225,7 +314,7 @@ export class FormModel<D extends { [key: string]: any } = unknown> implements Fo
     } else {
       invariant(
         this._valueShape === valueShape,
-        '[xform] FormModel 的结构需要在使用过程中保持一致，一个数据索引对应的结构不能从数组变为对象，也不能从对象变为数组'
+        '[xform] FormModel 的结构需要在使用过程中保持一致，一个数据索引对应的结构不能从数组变为对象，也不能从对象变为数组',
       );
     }
   }
@@ -292,10 +381,21 @@ export class FormModel<D extends { [key: string]: any } = unknown> implements Fo
   }
 
   _markDeleted() {
-    invariant(this._modelType === ModelType.subModel, '只有 subModels 才允许被删除.');
+    invariant(
+      this._modelType === ModelType.subModel,
+      '只有 subModels 才允许被删除.',
+    );
     this.name = '(deleted)';
     this._selfDeleted = true;
   }
+}
+
+export interface CheckConfig<D> {
+  validate(
+    values: D,
+    model: FormModel<D>,
+  ): undefined | null | string | Promise<any>;
+  validateOnMount?: boolean;
 }
 
 export class Check<D = unknown> {
@@ -331,7 +431,9 @@ export class Check<D = unknown> {
 
   _track(config: CheckConfig<D>) {
     if (this.isMounted) {
-      console.warn(`[xform] check \`${this.path.join('.')}\` 已在视图中被加载。`);
+      console.warn(
+        `[xform] check \`${this.path.join('.')}\` 已在视图中被加载。`,
+      );
       return;
     }
 
@@ -348,7 +450,9 @@ export class Check<D = unknown> {
     if (!this.isMounted) {
       return;
     }
+
     const { validate } = this.config;
+
     let cancelled = false;
     this.cancelValidation?.();
     this.validating = true;
@@ -357,6 +461,7 @@ export class Check<D = unknown> {
       this.cancelValidation = null;
       this.validating = false;
     });
+
     const handleValidateResult = action((error: any) => {
       if (cancelled) {
         return;
@@ -366,8 +471,10 @@ export class Check<D = unknown> {
       this.error = error;
       return error;
     });
+
     const model = this.parent;
     const result: any = validate(toJS(model.values), model);
+
     if (typeof result?.then === 'function') {
       return Promise.resolve(result).then(handleValidateResult);
     } else {
@@ -376,21 +483,47 @@ export class Check<D = unknown> {
   }
 }
 
+export interface FieldState {
+  error?: any;
+  validating?: boolean;
+  cancelValidation?(): void;
+
+  [key: string]: any;
+}
+
+export enum FieldType {
+  normal = 'normal',
+  tuple = 'tuple',
+  readonly = 'readonly',
+}
+
+type FieldCreateCommon = { parent: FormModel; name: string; forkName?: string };
+type FieldCreateOptions =
+  | ({ fieldType: FieldType.normal } & FieldCreateCommon)
+  | ({ fieldType: FieldType.tuple; tupleParts: string[] } & FieldCreateCommon)
+  | ({ fieldType: FieldType.readonly; value: any } & FieldCreateCommon);
+
 export class Field<V = unknown> {
   static ORIGINAL = 'original';
+
   static getHtmlId(prefix: string, field: Field) {
     if (prefix == null || typeof prefix !== 'string') {
       // null 表示不生成 id 属性
       return undefined;
     }
+
     const path = field.path.join('.');
-    const fork = field._forkName !== Field.ORIGINAL ? `#${field._forkName}` : '';
+    const fork =
+      field._forkName !== Field.ORIGINAL ? `#${field._forkName}` : '';
     return `${prefix}${path}${fork}`;
   }
+
   /** 字段配置的最新缓存（注意不要修改该值）*/
   config?: FieldConfig<V> = null;
+
   /** 字段是否在视图中被渲染 */
   isMounted = false;
+
   readonly parent: FormModel<any>;
   readonly name: string;
   readonly _forkName: string;
@@ -398,7 +531,9 @@ export class Field<V = unknown> {
   readonly id: string;
   readonly _forkMap: Map<string, Field>;
   readonly fieldType: FieldType;
+
   readonly _readonlyValue: any;
+
   state: FieldState = {};
 
   get value(): V {
@@ -414,10 +549,11 @@ export class Field<V = unknown> {
   set value(value: V) {
     if (this.isDeleted) {
       console.warn(
-        '[xform] 对已删除的 Field 进行赋值将被忽略。请不要对已删除的 Model/Field 进行操作。'
+        '[xform] 对已删除的 Field 进行赋值将被忽略。请不要对已删除的 Model/Field 进行操作。',
       );
       return;
     }
+
     if (this.fieldType === FieldType.normal) {
       this.parent.setValue(this.name, value);
     } else if (this.fieldType === FieldType.tuple) {
@@ -426,7 +562,7 @@ export class Field<V = unknown> {
       });
     } else if (this.fieldType === FieldType.readonly) {
       console.warn(
-        '[xform] 对只读 Field 进行赋值将被忽略，请检查是否为 FormItem 设置了 props.name 或 props.field.'
+        '[xform] 对只读 Field 进行赋值将被忽略，请检查是否为 FormItem 设置了 props.name 或 props.field.',
       );
     }
   }
@@ -441,11 +577,13 @@ export class Field<V = unknown> {
     this.name = opts.name;
     this.id = this.parent.root._fieldIdGenerator.getNextId();
     this._forkName = opts.forkName ?? Field.ORIGINAL;
+
     if (opts.fieldType === FieldType.tuple) {
       this._tupleParts = opts.tupleParts;
     } else if (opts.fieldType === FieldType.readonly) {
       this._readonlyValue = opts.value;
     }
+
     const name = this.name;
     const forkName = this._forkName;
 
@@ -462,9 +600,12 @@ export class Field<V = unknown> {
         isDeleted: computed,
       },
       {
-        name: `${this.id}(${name}${forkName === Field.ORIGINAL ? '' : '#' + forkName})`,
-      }
+        name: `${this.id}(${name}${
+          forkName === Field.ORIGINAL ? '' : '#' + forkName
+        })`,
+      },
     );
+
     if (forkName === Field.ORIGINAL) {
       this._forkMap = new Map();
     } else {
@@ -478,13 +619,15 @@ export class Field<V = unknown> {
     if (this.isMounted) {
       console.warn(
         `[xform] field \`${this.path.join(
-          '.'
-        )}\` 已在视图中被加载，你需要 fork 该字段来进行多次加载.`
+          '.',
+        )}\` 已在视图中被加载，你需要 fork 该字段来进行多次加载.`,
       );
       return;
     }
+
     this.config = config;
     this.isMounted = true;
+
     return () => {
       this.config = null;
       this.isMounted = false;
@@ -518,6 +661,7 @@ export class Field<V = unknown> {
     if (!this.isMounted) {
       return;
     }
+
     const {
       validate,
       defaultValue,
@@ -586,7 +730,7 @@ export class Field<V = unknown> {
   handleChange = (nextValue: any, ...rest: any[]) => {
     if (nextValue === undefined && this.config?.defaultValue !== undefined) {
       console.warn(
-        '[xform] xform 中所有组件均为受控用法，不支持 onChange(undefined)，该调用将自动变为 onChange(null)'
+        '[xform] xform 中所有组件均为受控用法，不支持 onChange(undefined)，该调用将自动变为 onChange(null)',
       );
       nextValue = null;
     }
@@ -604,10 +748,13 @@ export class Field<V = unknown> {
     if (this.isDeleted) {
       return;
     }
+
     const parent = this.parent;
+
     // 清空错误
     this.state.cancelValidation?.();
     this.state.error = null;
+
     // 清空值
     if (parent.values == null) {
       return;

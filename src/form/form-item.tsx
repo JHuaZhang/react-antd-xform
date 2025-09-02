@@ -1,43 +1,28 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+/* eslint-disable eqeqeq */
 import cx from 'classnames';
-import { observer } from 'mobx-react-lite';
-import stringifyObject from 'stringify-object';
+import pick from 'lodash/pick';
 import { reaction, runInAction, toJS } from 'mobx';
-import { FieldType } from './enum';
-import { pick } from './common-utils';
-import { Field, FormModel } from './model';
-import { useModel } from './context/modelContext';
-import { useFormEnv } from './context/formEnvContext';
-import { ALL_COMPONENTS } from '../form-ui/default-component';
-import { composeValue, isFalsyOrEmptyArray, asCSSLength } from './common-utils';
-import {
-  FormItemCreationOptions,
-  FormItemProps,
-  FieldConfig,
-  FormItemViewProps,
-  FormItemComponentProps,
-} from './type';
+import { observer } from 'mobx-react-lite';
+import React, { useEffect, useLayoutEffect } from 'react';
+import stringifyObject from 'stringify-object';
+import { composeValue } from './common-utils';
+import { ALL_COMPONENTS } from './default-component';
+import { useFormEnv, useModel } from './form';
+import { FormItemView } from './form-ui';
+import { Field, FieldConfig, FieldType, FormModel } from './model';
 
-function processCreationOptions(
-  options: FormItemCreationOptions
-): Required<Omit<FormItemCreationOptions, 'component'>> {
-  const render = options.render ?? ((props) => React.createElement(options.component, props));
-  return {
-    name: options.name,
-    hidden: options.hidden,
-    withField: Boolean(options.withField),
-    statusPropName: composeValue(options.statusPropName, 'state'),
-    valuePropName: composeValue(options.valuePropName, 'value'),
-    hasIntrinsicWidth: options.hasIntrinsicWidth !== false,
-    defaultValue: Object.keys(options).includes('defaultValue') ? options.defaultValue : null,
-    isEmpty: options.isEmpty ?? isFalsyOrEmptyArray,
-    render: render,
-    renderPreview: options.renderPreview ?? render,
-  };
+function isFalsyOrEmptyArray(value: any) {
+  return !value || (Array.isArray(value) && value.length === 0);
 }
 
-function resolveField(fieldProp: Field<any>, model: FormModel<any>, name: string, valueProp: any) {
+function resolveField(
+  fieldProp: Field<any>,
+  model: FormModel<any>,
+  name: string,
+  valueProp: any,
+) {
   let field: Field<any>;
+
   if (fieldProp != null) {
     field = fieldProp;
   } else if (name === '&') {
@@ -58,51 +43,73 @@ function resolveField(fieldProp: Field<any>, model: FormModel<any>, name: string
   return field;
 }
 
-export function FormItemView({
-  htmlId,
-  label = '',
-  help,
-  tip,
-  asterisk,
-  error,
-  children,
-  className,
-  style,
-  labelWidth,
-  controlWidth,
-  rightNode,
-  labelStyle,
-  controlStyle,
-}: FormItemViewProps) {
-  return (
-    <div
-      data-xform-id={htmlId}
-      className={cx('form-item', className)}
-      style={
-        {
-          '--label-width': asCSSLength(labelWidth),
-          '--control-width': asCSSLength(controlWidth),
-          ...style,
-        } as any
-      }
-    >
-      {label == null && tip == null ? null : (
-        <label className="form-item-label" htmlFor={htmlId} style={labelStyle}>
-          {asterisk && <span className="required-indicator" />}
-          {label && <span className="form-item-label-text">{label}</span>}
-          {/* {tip && <Tip title={tip} />} */}
-        </label>
-      )}
+export interface FormItemComponentProps {
+  value?: any;
+  onChange?(...args: any[]): void;
+  onFocus?(...args: any[]): void;
+  onBlur?(...args: any[]): void;
+  readOnly?: any;
+  disabled?: any;
+  isPreview?: any;
 
-      <div className="form-item-control" style={controlStyle}>
-        {children}
-        {help && <div className="help">{help}</div>}
-        {error && <div className="error-message">{error}</div>}
-      </div>
+  [prop: string]: any;
+}
 
-      {rightNode}
-    </div>
-  );
+export interface FormItemCreationOptions {
+  /** 名称 */
+  name: string;
+
+  /** 是否为隐藏元素 */
+  hidden?: boolean;
+
+  /** 是否需要将 field 对象传递给组件 */
+  withField?: boolean;
+
+  /** 控件对应的 React 组件，例如 `<FormItem component="select" />` 对应 `Select` 组件. */
+  component?: React.ComponentType<FormItemComponentProps>;
+
+  /** 控件渲染方法，与 component 参数二选一，优先级高于 component */
+  render?(arg: FormItemComponentProps): React.ReactElement;
+
+  /** 组件值的属性名称，默认为 `'value'` */
+  valuePropName?: string;
+
+  /** 组件状态值的属性名称，默认为 `'state'` */
+  statusPropName?: string;
+
+  /** 预览态下组件的渲染方法。如果不设置该方法，预览态下将使用 render/component 作为后备方案. */
+  renderPreview?(props: FormItemComponentProps): React.ReactNode;
+
+  /** 默认值 */
+  defaultValue?: any;
+
+  /** 组件类型默认的空值判断方法 */
+  isEmpty?(value: any): boolean;
+
+  /** 组件是否具有固有宽度，默认为 true。该选项为 true 时，controlWidth 将不对组件产生效果 */
+  hasIntrinsicWidth?: boolean;
+}
+
+function processCreationOptions(
+  options: FormItemCreationOptions,
+): Required<Omit<FormItemCreationOptions, 'component'>> {
+  const render =
+    options.render ??
+    ((props) => React.createElement(options.component, props));
+  return {
+    name: options.name,
+    hidden: options.hidden,
+    withField: Boolean(options.withField),
+    statusPropName: composeValue(options.statusPropName, 'state'),
+    valuePropName: composeValue(options.valuePropName, 'value'),
+    hasIntrinsicWidth: options.hasIntrinsicWidth !== false,
+    defaultValue: Object.keys(options).includes('defaultValue')
+      ? options.defaultValue
+      : null,
+    isEmpty: options.isEmpty ?? isFalsyOrEmptyArray,
+    render: render,
+    renderPreview: options.renderPreview ?? render,
+  };
 }
 
 export function createFormItem(inputOptions: FormItemCreationOptions) {
@@ -130,15 +137,21 @@ export function createFormItem(inputOptions: FormItemCreationOptions) {
     const componentProps = {
       id: htmlId,
       ...(isPreview ? { isPreview: true } : null),
-      // dataSource, readOnly, disabled,options 允许直接透传
-      ...pick(props, ['dataSource', 'readOnly', 'disabled','options']),
+      // dataSource, readOnly, disabled 允许直接透传
+      ...pick(props, ['dataSource', 'readOnly', 'disabled']),
       ...componentPropsProp,
       // status 优先用 prop 中的值，然后再根据 error 自动判断
       [options.statusPropName]: composeValue(
         componentPropsProp?.[options.statusPropName],
-        composeValue(props[options.statusPropName], error ? 'error' : undefined)
+        composeValue(
+          props[options.statusPropName],
+          error ? 'error' : undefined,
+        ),
       ),
-      [options.valuePropName]: composeValue(props[options.valuePropName], value),
+      [options.valuePropName]: composeValue(
+        props[options.valuePropName],
+        value,
+      ),
       onChange: composeValue(props.onChange, field.handleChange),
       onFocus: composeValue(props.onFocus, field.handleFocus),
       onBlur: composeValue(props.onBlur, field.handleBlur),
@@ -170,14 +183,20 @@ export function createFormItem(inputOptions: FormItemCreationOptions) {
         return reaction(
           () => field.value,
           () => {
-            if (field.value === undefined && fieldConfig.defaultValueProp !== undefined) {
+            if (
+              field.value === undefined &&
+              fieldConfig.defaultValueProp !== undefined
+            ) {
               field.value = fieldConfig.defaultValueProp;
             }
           },
-          { fireImmediately: true }
+          { fireImmediately: true },
         );
       } else if (fieldConfig.writeDefaultValueToModel) {
-        if (field.value === undefined && fieldConfig.defaultValueProp !== undefined) {
+        if (
+          field.value === undefined &&
+          fieldConfig.defaultValueProp !== undefined
+        ) {
           // 注意只有「不为 undefined」且「通过 FormItem props 设置的」的默认值才会被回写到 model 中
           runInAction(() => {
             field.value = fieldConfig.defaultValueProp;
@@ -229,7 +248,9 @@ export function createFormItem(inputOptions: FormItemCreationOptions) {
         controlStyle={props.controlStyle}
         rightNode={props.rightNode}
       >
-        {isPreview ? renderPreview(componentProps) : options.render(componentProps)}
+        {isPreview
+          ? renderPreview(componentProps)
+          : options.render(componentProps)}
       </FormItemView>
     );
   }
@@ -243,17 +264,23 @@ const COMPONENT_DICT: { [name: string]: React.FunctionComponent<any> } = {};
 for (const config of ALL_COMPONENTS) {
   const Component = createFormItem(config);
   COMPONENT_DICT[config.name] = Component;
-  // if (config.aliases) {
-  //   for (const alias of config.aliases) {
-  //     COMPONENT_DICT[alias] = Component;
-  //   }
-  // }
+  if (config.aliases) {
+    for (const alias of config.aliases) {
+      COMPONENT_DICT[alias] = Component;
+    }
+  }
 }
 
-export const AnonymousFormItem = createFormItem({
-  name: 'anonymous',
-  render({ $Component: Component, ...props }: FormItemComponentProps) {
-    return <Component {...props} />;
+const Hidden = createFormItem({
+  name: 'hidden',
+  hidden: true,
+  hasIntrinsicWidth: false,
+  defaultValue: undefined,
+  isEmpty() {
+    return false;
+  },
+  render({ id, value }) {
+    return <input type="hidden" value={stringifyObject(value)} id={id} />;
   },
 });
 
@@ -277,25 +304,48 @@ const NotFound = createFormItem({
   },
 });
 
-const Hidden = createFormItem({
-  name: 'hidden',
-  hidden: true,
-  hasIntrinsicWidth: false,
-  defaultValue: undefined,
-  isEmpty() {
-    return false;
-  },
-  render({ id, value }) {
-    return <input type="hidden" value={stringifyObject(value)} id={id} />;
+const AnonymousFormItem = createFormItem({
+  name: 'anonymous',
+  render({ $Component: Component, ...props }: FormItemComponentProps) {
+    return <Component {...props} />;
   },
 });
+
+export interface FormItemProps
+  extends Omit<FieldConfig<any>, 'defaultValueProp' | 'valueProp' | 'htmlId'> {
+  use?: boolean;
+  component: string | React.ComponentType<FormItemComponentProps>;
+  componentProps?: any;
+  dataSource?: any;
+  style?: React.CSSProperties;
+  className?: string;
+
+  name?: string;
+  field?: Field;
+
+  value?: any;
+  onChange?(nextValue: any): void;
+  onFocus?(): void;
+  onBlur?(): void;
+  renderPreview?(props: FormItemProps): React.ReactNode;
+
+  labelWidth?: number | string;
+  controlWidth?: number | string;
+  labelStyle?: React.CSSProperties;
+  controlStyle?: React.CSSProperties;
+  rightNode?: React.ReactNode;
+  isPreview?: boolean;
+}
 
 export function FormItem({ use, component, ...props }: FormItemProps) {
   if (use === false) {
     return null;
   }
+
   if (component == null) {
-    return <NotFound {...props} componentProps={{ $Component: String(component) }} />;
+    return (
+      <NotFound {...props} componentProps={{ $Component: String(component) }} />
+    );
   } else if (typeof component === 'string') {
     if (component === 'hidden') {
       return <Hidden {...props} />;
@@ -304,6 +354,7 @@ export function FormItem({ use, component, ...props }: FormItemProps) {
     if (Comp == null) {
       return <NotFound {...props} componentProps={{ $Component: component }} />;
     }
+
     return React.createElement(Comp, props);
   } else {
     return (
@@ -314,3 +365,9 @@ export function FormItem({ use, component, ...props }: FormItemProps) {
     );
   }
 }
+
+FormItem.register = (options: FormItemCreationOptions) => {
+  COMPONENT_DICT[options.name] = createFormItem(options);
+};
+
+FormItem.COMPONENT_DICT = COMPONENT_DICT;
