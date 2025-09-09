@@ -1,8 +1,8 @@
-import { Button,ConfigProvider } from 'antd';
+import { Button, ConfigProvider } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { Form, FormItem, FormModel } from '../../index';
 import { ValuePreview } from '../components/ValuePreview';
-import zhCN from 'antd/es/locale/zh_CN'; 
+import zhCN from 'antd/es/locale/zh_CN';
 import '../index.css';
 
 export default {
@@ -21,10 +21,10 @@ const ObservableFormExample = observer(() => {
       <div className="title">基本用法</div>
       <div className="container">
         <Form model={model} onSubmit={(values) => console.log(values)}>
-          <FormItem component="input" label="姓名" name="name" required />
+          <FormItem component="input" label="input表单" name="name" required />
           <FormItem
             component="textArea"
-            label="介绍"
+            label="textArea"
             labelStyle={{ marginTop: -4 }}
             name="introduce"
             required
@@ -32,7 +32,7 @@ const ObservableFormExample = observer(() => {
           <FormItem
             defaultValue="jack"
             component="select"
-            label="朋友"
+            label="select单选"
             options={[
               { value: 'jack', label: 'Jack' },
               { value: 'lucy', label: 'Lucy' },
@@ -49,7 +49,7 @@ const ObservableFormExample = observer(() => {
           <FormItem
             defaultValue={['book']}
             component="multiSelect"
-            label="爱好"
+            label="select多选"
             options={[
               { value: 'book', label: '读书' },
               { value: 'study', label: '学习' },
@@ -66,7 +66,7 @@ const ObservableFormExample = observer(() => {
           <FormItem
             component="radio"
             labelStyle={{ marginTop: -4 }}
-            label="性别"
+            label="radio单选"
             options={[
               { value: 'male', label: '男' },
               { value: 'female', label: '女' },
@@ -77,10 +77,27 @@ const ObservableFormExample = observer(() => {
             required
           />
           <FormItem
+            component="radio"
+            labelStyle={{ marginTop: -4 }}
+            label="radio单选"
+            options={[
+              { value: 'male', label: '男' },
+              { value: 'female', label: '女' },
+            ]}
+            optionType="button"
+            defaultValue="male"
+            writeDefaultValueToModel={true}
+            componentProps={{
+              optionType: 'button',
+            }}
+            name="gender"
+            required
+          />
+          <FormItem
             component="checkbox"
             defaultValue={['apple']}
             writeDefaultValueToModel={true}
-            label="喜欢的水果"
+            label="checkbox多选"
             labelStyle={{ marginTop: -4 }}
             options={[
               { value: 'apple', label: '苹果' },
@@ -93,7 +110,7 @@ const ObservableFormExample = observer(() => {
             component="inputNumber"
             defaultValue={1}
             writeDefaultValueToModel={true}
-            label="折扣"
+            label="数字表单"
             name="numbers"
             required
             componentProps={{
@@ -105,7 +122,7 @@ const ObservableFormExample = observer(() => {
             component="slider"
             defaultValue={80}
             writeDefaultValueToModel={true}
-            label="进度条"
+            label="slider进度条"
             name="slider"
             required
           />
@@ -113,14 +130,14 @@ const ObservableFormExample = observer(() => {
             component="switch"
             defaultValue={true}
             writeDefaultValueToModel={true}
-            label="开关"
+            label="switch开关"
             name="switch"
             required
           />
           <FormItem
             component="datePicker"
             writeDefaultValueToModel={true}
-            label="日期"
+            label="日期选择"
             name="date"
             componentProps={{
               style: { width: '100%' },
@@ -131,18 +148,18 @@ const ObservableFormExample = observer(() => {
           <FormItem
             component="dateRangePicker"
             writeDefaultValueToModel={true}
-            label="日期区间"
+            label="日期区间选择"
             name="dateRange"
             componentProps={{
               style: { width: '100%' },
-               picker: 'date',
+              picker: 'date',
             }}
             required
           />
           <FormItem
             component="timePicker"
             writeDefaultValueToModel={true}
-            label="时间"
+            label="时间选择"
             name="time"
             componentProps={{
               style: { width: '100%' },
@@ -150,13 +167,32 @@ const ObservableFormExample = observer(() => {
             required
           />
           <FormItem
-            component="timeRangePickerPicker"
+            component="timeRangePicker"
             writeDefaultValueToModel={true}
-            label="时间区间"
+            label="时间区间选择"
             name="timeRange"
             componentProps={{
               style: { width: '100%' },
             }}
+            required
+          />
+          <FormItem
+            component="rate"
+            writeDefaultValueToModel={true}
+            label="rate评分"
+            name="rate"
+            labelStyle={{ marginTop: -6 }}
+            componentProps={{
+              style: { width: '100%' },
+            }}
+            required
+          />
+          <FormItem
+            component="colorPicker"
+            writeDefaultValueToModel={true}
+            label="colorPicker"
+            name="colorPicker"
+            labelStyle={{ marginTop: -6 }}
             required
           />
           <Form.Submit ButtonComponent={Button} type="primary">
