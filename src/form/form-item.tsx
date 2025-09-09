@@ -131,7 +131,7 @@ export function createFormItem(inputOptions: FormItemCreationOptions) {
       id: htmlId,
       ...(isPreview ? { isPreview: true } : null),
       // dataSource, readOnly, disabled,options 允许直接透传
-      ...pick(props, ['dataSource', 'readOnly', 'disabled','options']),
+      ...pick(props, ['dataSource', 'readOnly', 'disabled', 'options']),
       ...componentPropsProp,
       // status 优先用 prop 中的值，然后再根据 error 自动判断
       [options.statusPropName]: composeValue(
@@ -291,6 +291,8 @@ const Hidden = createFormItem({
 });
 
 export function FormItem({ use, component, ...props }: FormItemProps) {
+  const formEnv = useFormEnv();
+  const variant = formEnv.variant;
   if (use === false) {
     return null;
   }
@@ -304,12 +306,15 @@ export function FormItem({ use, component, ...props }: FormItemProps) {
     if (Comp == null) {
       return <NotFound {...props} componentProps={{ $Component: component }} />;
     }
-    return React.createElement(Comp, props);
+    return React.createElement(Comp, {
+      ...props,
+      componentProps: { ...props.componentProps, variant },
+    });
   } else {
     return (
       <AnonymousFormItem
         {...props}
-        componentProps={{ ...props.componentProps, $Component: component }}
+        componentProps={{ ...props.componentProps, variant, $Component: component }}
       />
     );
   }

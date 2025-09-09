@@ -3,6 +3,10 @@ import { Field, FormModel } from './model';
 import { FieldType, ModelType } from './enum';
 import { AsyncValue } from './helpers/AsyncValue';
 
+export const Variants = ['outlined', 'borderless', 'filled', 'underlined'] as const;
+
+export type Variant = (typeof Variants)[number];
+
 type valueOf<T> = T[keyof T];
 
 export type XName<D> =
@@ -144,6 +148,10 @@ export interface FormEnvContextType {
    * @see https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/label
    * */
   htmlIdPrefix?: string;
+  /**
+   * 表单样式参数 from antd
+   * */
+  variant?: Variant;
 }
 
 export interface FormLayoutParams {
@@ -179,6 +187,10 @@ export interface FormProps extends FormEnvContextType {
    * */
   layout?: FormLayoutParams;
   children?: React.ReactNode;
+  /**
+   * 表单样式参数 from antd
+   * */
+  variant?: Variant;
 }
 
 export interface FormLayoutParams {
@@ -200,19 +212,6 @@ export interface FormLayoutProps extends Partial<FormLayoutParams> {
   children?: ReactNode;
   containerProps?: any;
   defaultLabelTopPosition?: number | string;
-}
-
-export interface FormItemGroupProps {
-  label?: React.ReactNode;
-  tip?: React.ReactNode;
-  asterisk?: boolean;
-  children?: React.ReactNode;
-  labelWidth?: number | string;
-  labelTopPosition?: number | string;
-  controlWidth?: number | string;
-  className?: string;
-  style?: React.CSSProperties;
-  inline?: boolean;
 }
 
 export interface FormItemComponentProps {
@@ -273,6 +272,7 @@ export interface FormItemProps
   controlStyle?: React.CSSProperties;
   rightNode?: React.ReactNode;
   isPreview?: boolean;
+  variant?: Variant;
 }
 
 export interface FormItemViewProps {

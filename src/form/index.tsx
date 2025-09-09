@@ -23,6 +23,7 @@ export function Form({
   layout,
   containerProps,
   htmlIdPrefix: htmlIdPrefixProp,
+  variant,
   ...restEnvProps
 }: FormProps) {
   const [_model] = useState(() => new FormModel(defaultValue));
@@ -30,7 +31,7 @@ export function Form({
   const htmlIdPrefix = useHtmlIdPrefix(htmlIdPrefixProp);
 
   return (
-    <FormEnvProvider htmlIdPrefix={htmlIdPrefix} {...restEnvProps}>
+    <FormEnvProvider htmlIdPrefix={htmlIdPrefix} variant={variant} {...restEnvProps}>
       <ModelProvider value={model}>
         <FormLayout style={style} className={className} containerProps={containerProps} {...layout}>
           {children}

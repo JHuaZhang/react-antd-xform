@@ -1,8 +1,7 @@
 import cx from 'classnames';
 import styled from 'styled-components';
 import { asCSSLength } from '../common-utils';
-import { useFormEnv } from '../context/formEnvContext';
-import { FormLayoutProps, FormItemGroupProps } from '../type';
+import { FormLayoutProps } from '../type';
 
 const FormLayoutContainer = styled.div`
   --label-width: auto;
@@ -170,56 +169,3 @@ export function FormLayout({
     </FormLayoutContainer>
   );
 }
-
-const FormItemGroupDiv = styled.div`
-  ${FormLayoutContainer}.horizontal & {
-    display: flex;
-  }
-  &.inline {
-    .form-item-group-content {
-      display: flex;
-    }
-  }
-`;
-
-/** @deprecated 请使用 Form.ItemView 代替 ItemGroup */
-export const FormItemGroup = ({
-  label,
-  asterisk,
-  tip,
-  children,
-  labelWidth,
-  controlWidth,
-  className,
-  style,
-  inline,
-}: FormItemGroupProps) => {
-  const { isPreview } = useFormEnv();
-
-  return (
-    <FormItemGroupDiv
-      className={cx('form-item-group', { inline, 'form-item-preview': isPreview }, className)}
-      style={style}
-    >
-      {label == null && tip == null ? null : (
-        <div className="form-item-label">
-          {asterisk && <span className="required-indicator" />}
-          {label && <span className="form-item-label-text">{label}</span>}
-          {/* {tip && <Tip title={tip} />} */}
-        </div>
-      )}
-
-      <div
-        className="form-item-group-content"
-        style={
-          {
-            '--label-width': asCSSLength(labelWidth),
-            '--control-width': asCSSLength(controlWidth),
-          } as any
-        }
-      >
-        {children}
-      </div>
-    </FormItemGroupDiv>
-  );
-};

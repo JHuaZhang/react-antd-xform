@@ -8,6 +8,7 @@ const FormEnvContext = createContext<FormEnvContextType>({
   validateOnChange: true,
   writeDefaultValueToModel: false,
   autoUnmount: false,
+  variant: 'outlined',
 });
 FormEnvContext.displayName = 'FormEnvContext';
 export const useFormEnv = () => useContext(FormEnvContext);

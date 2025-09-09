@@ -20,7 +20,7 @@ const ObservableFormExample = observer(() => {
     <ConfigProvider locale={zhCN}>
       <div className="title">基本用法</div>
       <div className="container">
-        <Form model={model} onSubmit={(values) => console.log(values)}>
+        <Form model={model} variant="underlined" onSubmit={(values) => console.log(values)}>
           <FormItem component="input" label="input表单" name="name" required />
           <FormItem
             component="textArea"
