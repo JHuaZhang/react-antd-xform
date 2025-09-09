@@ -13,24 +13,21 @@
   "scripts": {
     "build": "vite build",
     "dev": "sb dev -p 6006",
-    "build-storybook": "sb build"
+    "build-storybook": "sb build",
+    "docs:dev": "dumi dev",
+    "docs:build": "dumi build",
+    "docs:serve": "dumi serve"
   },
-  "keywords": [
-    "form",
-    "antd",
-    "react",
-    "mobx",
-    "react-antd-xform"
-  ],
+  "keywords": [],
   "author": "",
-  "license": "MIT",
+  "license": "ISC",
   "packageManager": "pnpm@10.12.1",
   "dependencies": {
     "@types/invariant": "^2.2.37",
     "@types/stringify-object": "^4.0.5",
     "antd": "^5.26.2",
     "classnames": "^2.5.1",
-    "dayjs": "^1.11.18",
+    "dayjs": "^1.11.15",
     "invariant": "^2.2.4",
     "mobx": "^6.13.7",
     "mobx-react-lite": "^4.1.0",
@@ -48,6 +45,7 @@
     "@types/react-dom": "^18.2.22",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@vitejs/plugin-react": "^4.6.0",
+    "dumi": "^2.4.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-json-view": "^1.21.3",
