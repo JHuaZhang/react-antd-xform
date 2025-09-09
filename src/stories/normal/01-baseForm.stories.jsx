@@ -192,6 +192,9 @@ const ObservableFormExample = observer(() => {
             writeDefaultValueToModel={true}
             label="colorPicker"
             name="colorPicker"
+            componentProps={{
+              returnType: 'hex',
+            }}
             labelStyle={{ marginTop: -6 }}
             required
           />

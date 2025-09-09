@@ -20,6 +20,7 @@ import {
   withDayjsTransformAntdDateRangePicker,
   withDayjsTransformAntdTime,
   withDayjsTransformAntdTimeRange,
+  withColorPickerHandler,
 } from './common-utils';
 import { FormItemCreationOptions } from '../form/type';
 
@@ -63,6 +64,8 @@ const HOC_RULES = {
   withDayjsTransformAntdDateRangePicker: ['dateRangePicker'] as const,
   withDayjsTransformAntdTime: ['timePicker'] as const,
   withDayjsTransformAntdTimeRange: ['timeRangePicker'] as const,
+  // 颜色选择处理
+  withColorPickerHandler: ['colorPicker'] as const,
   // 多选下拉框
   multiSelect: ['multiSelect'] as const,
 };
@@ -115,7 +118,9 @@ const ALL_COMPONENTS = (Object.keys(COMPONENT_MAP) as ComponentKey[]).map((name)
   if ((HOC_RULES.multiSelect as readonly ComponentKey[]).includes(name)) {
     component = withInjectedProps({ mode: 'multiple' })(component);
   }
-
+  if ((HOC_RULES.withColorPickerHandler as readonly ComponentKey[]).includes(name)) {
+    component = withColorPickerHandler(component);
+  }
   return {
     name,
     component,

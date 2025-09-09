@@ -1,14 +1,16 @@
 import React, { useMemo, useCallback } from 'react';
+import { ColorPicker } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
-import weekOfYear from 'dayjs/plugin/weekOfYear';
-import weekYear from 'dayjs/plugin/weekYear';
 import isoweek from 'dayjs/plugin/isoweek';
+import weekYear from 'dayjs/plugin/weekYear';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import type { ColorPickerProps, Color } from 'antd/es/color-picker';
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
 dayjs.extend(isoweek);
 
 export function isEmptyValue(value: any) {
-  return !value && value !== 0 || (Array.isArray(value) && value.length === 0);
+  return (!value && value !== 0) || (Array.isArray(value) && value.length === 0);
 }
 
 // 默认时间格式
@@ -292,5 +294,46 @@ export const withInjectedProps = (injectedProps: Record<string, any>) => {
     });
     WrappedComponent.displayName = `WithInjectedProps(${Component.displayName || Component.name})`;
     return WrappedComponent;
+  };
+};
+
+/**
+ * 用于处理Antd ColorPicker的onChange返回值格式
+ * 根据 returnType 返回指定格式的值（如 hex、rgb、hsb）
+ */
+
+type ColorReturnType = 'hex' | 'rgb' | 'hsv';
+
+interface ColorPickerWrapperProps extends Omit<ColorPickerProps, 'onChange'> {
+  onChange?: (value: string) => void;
+  returnType?: ColorReturnType;
+}
+export const withColorPickerHandler = (Component: typeof ColorPicker) => {
+  return ({
+    onChange,
+    returnType = 'hex',
+    ...props
+  }: ColorPickerWrapperProps) => {
+    const handleChange = (color: Color) => {
+      if (!onChange) return;
+      let value: string;
+      switch (returnType) {
+        case 'hex':
+          value = color.toHexString();
+          break;
+        case 'rgb':
+          value = color.toRgbString();
+          break;
+        case 'hsv':
+          const hsv = color.toHsb();
+          value = `hsv(${hsv.h}, ${hsv.s * 100}%, ${hsv.b * 100}%)`;
+          break;
+        default:
+          value = color.toHexString();
+      }
+
+      onChange(value);
+    };
+    return <Component {...props} onChange={handleChange} />;
   };
 };
