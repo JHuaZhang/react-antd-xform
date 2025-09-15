@@ -1,5 +1,25 @@
-# 介绍
+---
+title: 快速开始
+order: 1
+nav:
+  title: 指南
+  order: 1
+---
 
-`react-antd-xform` 是一个基于 MobX 的动态表单解决方案，支持 JSON Schema、联动、校验等。
+# 快速开始
 
-## 快速上手
+`react-antd-xform` 是一个基于 MobX 和 Ant Design 的动态表单解决方案，提供 JSON Schema 驱动、表单联动和复杂校验等高级功能。
+
+## 📦 安装
+
+选择你喜欢的包管理器进行安装：
+
+```bash
+# npm
+npm install react-antd-xform --save
+
+# yarn
+yarn add react-antd-xform
+
+# pnpm
+pnpm add react-antd-xform
