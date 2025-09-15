@@ -2,7 +2,7 @@
 title: 快速开始
 order: 1
 nav:
-  title: 指南
+  title: 介绍
   order: 1
 ---
 

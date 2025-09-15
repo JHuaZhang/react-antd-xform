@@ -22,7 +22,7 @@ export default defineConfig({
     // 站点描述，可用于SEO和首页展示
     description: '基于 React + Ant Design 的表单解决方案',
     // 导航栏配置，使用数组形式
-    nav: [{ title: '指南', link: '/guide' }],
+    nav: [{ title: '介绍', link: '/introduction' }],
 
     // 配置社交链接，例如 GitHub
     socialLinks: {
