@@ -119,6 +119,7 @@ export function createFormItem(inputOptions: FormItemCreationOptions) {
   }: Omit<FormItemProps, 'component'>) {
     const formEnv = useFormEnv();
     const model = useModel();
+    const variant = formEnv.variant;
     const field = resolveField(fieldProp, model, name, props.value);
 
     const isPreview = composeValue(props.isPreview, formEnv.isPreview);
@@ -129,6 +130,7 @@ export function createFormItem(inputOptions: FormItemCreationOptions) {
 
     const componentProps = {
       id: htmlId,
+      variant,
       ...(isPreview ? { isPreview: true } : null),
       // dataSource, readOnly, disabled,options 允许直接透传
       ...pick(props, ['dataSource', 'readOnly', 'disabled', 'options']),
