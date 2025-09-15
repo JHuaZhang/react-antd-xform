@@ -14,7 +14,7 @@ coverage/
 /storybook-static
 
 
-.justconf
+.dumi/
 
 .justconf/
 /test/coverage
