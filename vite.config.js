@@ -4,7 +4,14 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [
-    react(),
+    react({
+      babel: {
+        plugins: [
+          // 生产环境移除 console
+          ...(process.env.NODE_ENV === 'production' ? ['transform-remove-console'] : []),
+        ],
+      },
+    }),
     dts({
       insertTypesEntry: true,
       include: ['src/**/*'],

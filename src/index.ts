@@ -6,7 +6,6 @@ import { FormModel } from './form/model';
 import { arrayHelpers } from './form/array-helper';
 import { AsyncValue } from './form/helpers/AsyncValue';
 import { modelUtils } from './form/model-utils';
-
 export {
   Form,
   FormEnvProvider,

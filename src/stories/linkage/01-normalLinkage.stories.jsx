@@ -11,7 +11,6 @@ export default {
 const model = new FormModel({ prov: '', cities: [] });
 const prov = model.getField('prov');
 const cities = model.getField('cities');
-console.log(cities, 'cities');
 const ALL_CITIES = [
   { prov: '浙江', cities: '杭州、绍兴、宁波、嘉兴、其他'.split('、') },
   { prov: '江苏', cities: '南京、常州、镇江、苏州、其他'.split('、') },

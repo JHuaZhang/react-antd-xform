@@ -107,7 +107,6 @@ export function FormItemView({
 
 export function createFormItem(inputOptions: FormItemCreationOptions) {
   const options = processCreationOptions(inputOptions);
-  console.log(options,'options')
 
   function FormItemComponent({
     defaultValue: defaultValueProp,
