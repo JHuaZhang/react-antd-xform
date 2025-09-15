@@ -12,9 +12,10 @@ coverage/
 /build
 /dist
 /storybook-static
-.dumi/tmp/
+.dumi
 .justconf/
 /test/coverage
 /node_modules
 /lib
 *.log
+/docs-dist
