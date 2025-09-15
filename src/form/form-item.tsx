@@ -107,6 +107,7 @@ export function FormItemView({
 
 export function createFormItem(inputOptions: FormItemCreationOptions) {
   const options = processCreationOptions(inputOptions);
+  console.log(options,'options')
 
   function FormItemComponent({
     defaultValue: defaultValueProp,
@@ -210,7 +211,7 @@ export function createFormItem(inputOptions: FormItemCreationOptions) {
         return null;
       }
     }
-
+    console.log(isPreview,'isPreviewisPreviewisPreview')
     return (
       <FormItemView
         htmlId={htmlId}

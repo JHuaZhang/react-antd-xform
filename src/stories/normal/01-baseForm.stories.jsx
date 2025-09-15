@@ -12,23 +12,19 @@ export default {
 
 const ObservableFormExample = observer(() => {
   const model = new FormModel({
-    name: '',
+    name: '44444',
     introduce: '我是张三，我来自湖北',
     date: '2025-09-17',
+    dateRange: ['2025-09-24', '2025-10-30'],
+    rate: 5,
   });
   return (
     <ConfigProvider locale={zhCN}>
       <div className="title">基本用法</div>
       <div className="container">
-        <Form model={model} variant="underlined" onSubmit={(values) => console.log(values)}>
-          <FormItem component="input" label="input表单" name="name" required />
-          <FormItem
-            component="textArea"
-            label="textArea"
-            labelStyle={{ marginTop: -4 }}
-            name="introduce"
-            required
-          />
+        <Form model={model} isPreview onSubmit={(values) => console.log(values)}>
+          <FormItem component="input" isPreview label="input表单" name="name" required />
+          <FormItem component="textArea" label="textArea" name="introduce" required />
           <FormItem
             defaultValue="jack"
             component="select"
@@ -65,7 +61,6 @@ const ObservableFormExample = observer(() => {
           />
           <FormItem
             component="radio"
-            labelStyle={{ marginTop: -4 }}
             label="radio单选"
             options={[
               { value: 'male', label: '男' },
@@ -181,7 +176,6 @@ const ObservableFormExample = observer(() => {
             writeDefaultValueToModel={true}
             label="rate评分"
             name="rate"
-            labelStyle={{ marginTop: -6 }}
             componentProps={{
               style: { width: '100%' },
             }}
@@ -195,7 +189,6 @@ const ObservableFormExample = observer(() => {
             componentProps={{
               returnType: 'hex',
             }}
-            labelStyle={{ marginTop: -6 }}
             required
           />
           <Form.Submit ButtonComponent={Button} type="primary">
