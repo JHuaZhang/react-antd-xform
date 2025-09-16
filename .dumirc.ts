@@ -61,6 +61,7 @@ export default defineConfig({
       width: 100%;
       position: fixed;
       bottom: 0;
+      background-color: #f5f5f5;
     }
     `,
   ],
