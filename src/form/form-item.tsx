@@ -210,7 +210,6 @@ export function createFormItem(inputOptions: FormItemCreationOptions) {
         return null;
       }
     }
-    console.log(isPreview,'isPreviewisPreviewisPreview')
     return (
       <FormItemView
         htmlId={htmlId}
