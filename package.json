@@ -11,12 +11,12 @@
     "dist"
   ],
   "scripts": {
-    "publish": "vite build",
-    "build": "cross-env DUMI_ENV=devbuild dumi build",
+    "build": "vite build",
     "dev": "sb dev -p 6006",
     "build-storybook": "sb build",
     "docs:dev": "dumi dev",
     "docs:build-site": "dumi build",
+    "docs:build": "cross-env DUMI_ENV=devbuild dumi build",
     "docs:serve": "dumi serve",
     "predeploy": "npm run docs:build",
     "deploy": "gh-pages -d docs-dist -b gh-pages"
