@@ -56,12 +56,20 @@ export default defineConfig({
       margin: 0 auto;
       padding: 20px;
     }
-
     .rc-footer-bottom{
       width: 100%;
-      position: fixed;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
       bottom: 0;
       background-color: #f5f5f5;
+      text-align: center;
+      box-sizing: border-box;
+
+  /* 关键：确保在有侧边栏时也能居中 */
+  left: 0;
+  right: 0;
     }
     `,
   ],
