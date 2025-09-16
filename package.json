@@ -17,7 +17,9 @@
     "docs:dev": "dumi dev",
     "docs:build": "dumi build",
     "docs:serve": "dumi serve",
-    "docs:build-dev": "cross-env DUMI_ENV=devbuild dumi build"
+    "docs:build-dev": "cross-env DUMI_ENV=devbuild dumi build",
+    "predeploy": "npm run docs:build",
+    "deploy": "gh-pages -d docs-dist -b gh-pages"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +31,7 @@
     "antd": "^5.26.2",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.15",
+    "gh-pages": "^6.3.0",
     "invariant": "^2.2.4",
     "mobx": "^6.13.7",
     "mobx-react-lite": "^4.1.0",
