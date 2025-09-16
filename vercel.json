@@ -1,0 +1,17 @@
+{
+  "name": "react-antd-xform",
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "docs-dist",
+        "buildCommand": "npm run docs:build"
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
