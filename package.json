@@ -11,11 +11,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build",
+    "publish": "vite build",
+    "build": "cross-env DUMI_ENV=devbuild dumi build",
     "dev": "sb dev -p 6006",
     "build-storybook": "sb build",
     "docs:dev": "dumi dev",
-    "docs:build": "cross-env DUMI_ENV=devbuild dumi build",
     "docs:build-site": "dumi build",
     "docs:serve": "dumi serve",
     "predeploy": "npm run docs:build",

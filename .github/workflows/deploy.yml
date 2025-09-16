@@ -20,7 +20,7 @@ jobs:
         run: pnpm install
 
       - name: Build Documentation
-        run: pnpm run docs:build
+        run: pnpm run build
         env:
           NODE_ENV: production
 
