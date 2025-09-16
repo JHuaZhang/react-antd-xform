@@ -1,9 +1,9 @@
 import React, { useMemo, useCallback } from 'react';
 import { ColorPicker } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
-import isoweek from 'dayjs/plugin/isoweek';
-import weekYear from 'dayjs/plugin/weekYear';
-import weekOfYear from 'dayjs/plugin/weekOfYear';
+import isoweek from 'dayjs/plugin/isoweek.js';
+import weekYear from 'dayjs/plugin/weekYear.js';
+import weekOfYear from 'dayjs/plugin/weekOfYear.js';
 import type { ColorPickerProps, Color } from 'antd/es/color-picker';
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
