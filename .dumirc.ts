@@ -7,7 +7,7 @@ const isDev = process.env.NODE_ENV === 'development' || process.env.DUMI_ENV ===
 export default defineConfig({
   favicons: ['https://gw.alipayobjects.com/zos/rmsportal/rlpTLlbMzTNYuZGGCVYM.png'],
   // 输出目录
-  outputPath: 'dist',
+  outputPath: 'docs-dist',
   history: {
     type: 'browser',
   },
