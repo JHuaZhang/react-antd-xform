@@ -16,7 +16,8 @@
     "build-storybook": "sb build",
     "docs:dev": "dumi dev",
     "docs:build": "dumi build",
-    "docs:serve": "dumi serve"
+    "docs:serve": "dumi serve",
+    "docs:build-dev": "cross-env DUMI_ENV=devbuild dumi build"
   },
   "keywords": [],
   "author": "",

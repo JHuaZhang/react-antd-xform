@@ -2,7 +2,7 @@ import { defineConfig } from 'dumi';
 import { defineThemeConfig } from 'dumi-theme-antd/dist/defineThemeConfig';
 
 // 判断是否为开发环境
-const isDev = true;
+const isDev = process.env.NODE_ENV === 'development' || process.env.DUMI_ENV === 'devbuild';
 
 export default defineConfig({
   favicons: ['https://gw.alipayobjects.com/zos/rmsportal/rlpTLlbMzTNYuZGGCVYM.png'],
