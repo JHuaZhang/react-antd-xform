@@ -1,13 +1,43 @@
 import React, { useMemo, useCallback } from 'react';
 import { ColorPicker } from 'antd';
+import type { ColorPickerProps, Color } from 'antd/es/color-picker';
+
+// ========================
+// 为dayjs打补丁，兼容Ant Design
+// ========================
+
+// 导入必要插件
 import dayjs, { Dayjs } from 'dayjs';
 import isoweek from 'dayjs/plugin/isoweek.js';
 import weekYear from 'dayjs/plugin/weekYear.js';
 import weekOfYear from 'dayjs/plugin/weekOfYear.js';
-import type { ColorPickerProps, Color } from 'antd/es/color-picker';
+
+// 应用插件（必须）
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
 dayjs.extend(isoweek);
+
+// 防止重复执行
+if (!(dayjs as any).__patchedForAntd__) {
+  (dayjs as any).__patchedForAntd__ = true;
+  // --- weekday() ---
+  // Ant Design 调用 .weekday()，但 dayjs 原生是 .day()
+  if (!dayjs.prototype.weekday) {
+    dayjs.prototype.weekday = function (this: dayjs.Dayjs): number {
+      return this.day(); // Sunday=0, Monday=1
+    };
+  }
+  if (!dayjs.prototype.localeData) {
+    dayjs.prototype.localeData = function () {
+      return {
+        firstDayOfWeek: () => 1, // 默认中文环境周一开头
+        weekdaysShort: () => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        monthsShort: () => 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_'),
+      };
+    };
+  }
+}
+// ========================
 
 export function isEmptyValue(value: any) {
   return (!value && value !== 0) || (Array.isArray(value) && value.length === 0);
@@ -309,11 +339,7 @@ interface ColorPickerWrapperProps extends Omit<ColorPickerProps, 'onChange'> {
   returnType?: ColorReturnType;
 }
 export const withColorPickerHandler = (Component: typeof ColorPicker) => {
-  return ({
-    onChange,
-    returnType = 'hex',
-    ...props
-  }: ColorPickerWrapperProps) => {
+  return ({ onChange, returnType = 'hex', ...props }: ColorPickerWrapperProps) => {
     const handleChange = (color: Color) => {
       if (!onChange) return;
       let value: string;

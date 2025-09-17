@@ -17,6 +17,7 @@
     "resolveJsonModule": true,
     "types": ["react", "react-dom", "mobx"] // 明确依赖的类型
   },
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "dist", // 排除输出目录

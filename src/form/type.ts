@@ -250,6 +250,18 @@ export interface FormItemCreationOptions {
   hasIntrinsicWidth?: boolean;
 }
 
+export interface BaseOptionType {
+  disabled?: boolean;
+  className?: string;
+  title?: string;
+  [name: string]: any;
+}
+export interface DefaultOptionType extends BaseOptionType {
+  label?: React.ReactNode;
+  value?: string | number | null;
+  children?: Omit<DefaultOptionType, 'children'>[];
+}
+
 export interface FormItemProps
   extends Omit<FieldConfig<any>, 'defaultValueProp' | 'valueProp' | 'htmlId'> {
   use?: boolean;
@@ -273,6 +285,7 @@ export interface FormItemProps
   rightNode?: React.ReactNode;
   isPreview?: boolean;
   variant?: Variant;
+  options?: DefaultOptionType[];
 }
 
 export interface FormItemViewProps {
