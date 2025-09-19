@@ -1,9 +1,0 @@
-"use strict";(self.webpackChunkreact_antd_xform=self.webpackChunkreact_antd_xform||[]).push([[395,614],{6353:function(s,d,_){_.r(d);var n=_(99482),r=_(36053),l=_(76856),h=_(71386),c=_(31341),t=_(8018),x=_(74908),j=_(48834),E=_(93319),f=_(49029),P=_(69238),D=_(83348),p=_(37120),o=_(40435),u=_(4174),i=_(75271),a=_(75254),e=_(52676);function m(){return(0,e.jsx)(o.dY,{children:(0,e.jsx)(i.Suspense,{fallback:(0,e.jsx)(u.Z,{}),children:(0,e.jsx)(e.Fragment,{children:(0,e.jsxs)("div",{className:"markdown",children:[(0,e.jsxs)("h1",{id:"\u5FEB\u901F\u5F00\u59CB",children:[(0,e.jsx)("a",{"aria-hidden":"true",tabIndex:"-1",href:"#\u5FEB\u901F\u5F00\u59CB",children:(0,e.jsx)("span",{className:"icon icon-link"})}),"\u5FEB\u901F\u5F00\u59CB"]}),(0,e.jsxs)("p",{children:[(0,e.jsx)("code",{children:a.texts[0].value}),a.texts[1].value]}),(0,e.jsxs)("h2",{id:"-\u5B89\u88C5",children:[(0,e.jsx)("a",{"aria-hidden":"true",tabIndex:"-1",href:"#-\u5B89\u88C5",children:(0,e.jsx)("span",{className:"icon icon-link"})}),"\u{1F4E6} \u5B89\u88C5"]}),(0,e.jsx)("p",{children:a.texts[2].value}),(0,e.jsx)(t.Z,{lang:"bash",children:a.texts[3].value})]})})})})}d.default=m},11744:function(s,d,_){_.d(d,{Z:function(){return n.Z}});var n=_(55532)},75254:function(s,d,_){_.r(d),_.d(d,{texts:function(){return n}});const n=[{value:"react-antd-xform",paraId:0,tocIndex:0},{value:" \u662F\u4E00\u4E2A\u57FA\u4E8E MobX \u548C Ant Design \u7684\u52A8\u6001\u8868\u5355\u89E3\u51B3\u65B9\u6848\uFF0C\u63D0\u4F9B JSON Schema \u9A71\u52A8\u3001\u8868\u5355\u8054\u52A8\u548C\u590D\u6742\u6821\u9A8C\u7B49\u9AD8\u7EA7\u529F\u80FD\u3002",paraId:0,tocIndex:0},{value:"\u9009\u62E9\u4F60\u559C\u6B22\u7684\u5305\u7BA1\u7406\u5668\u8FDB\u884C\u5B89\u88C5\uFF1A",paraId:1,tocIndex:1},{value:`# npm
-npm install react-antd-xform --save
-
-# yarn
-yarn add react-antd-xform
-
-# pnpm
-pnpm add react-antd-xform
-`,paraId:2,tocIndex:1}]}}]);
