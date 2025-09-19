@@ -87,6 +87,9 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.3.1
+      react-antd-xform:
+        specifier: ^1.0.9
+        version: 1.0.9(mobx-react-lite@4.1.0(mobx@6.13.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(mobx@6.13.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-dom:
         specifier: ^18.2.0
         version: 18.3.1(react@18.3.1)
@@ -7775,6 +7778,14 @@ packages:
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
+
+  react-antd-xform@1.0.9:
+    resolution: {integrity: sha512-jsUQOyFzdVfFQ95NKx7APhoQnQ6jwiI0IhunBXDqlMUJaic5r8fFTxb3pl8UTtUqeG81UzQcHy7yp10Luwenng==}
+    peerDependencies:
+      mobx: ^6.13.7
+      mobx-react-lite: ^4.1.0
+      react: ^18.2.0
+      react-dom: ^18.2.0
 
   react-base16-styling@0.6.0:
     resolution: {integrity: sha512-yvh/7CArceR/jNATXOKDlvTnPKPmGZz7zsenQ3jUwLzHkNUR0CvY3yGYJbWJ/nnxsL8Sgmt5cO3/SILVuPO6TQ==}
@@ -18884,6 +18895,26 @@ snapshots:
       rc-util: 5.44.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+
+  react-antd-xform@1.0.9(mobx-react-lite@4.1.0(mobx@6.13.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(mobx@6.13.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@types/invariant': 2.2.37
+      '@types/stringify-object': 4.0.5
+      antd: 5.27.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      classnames: 2.5.1
+      dayjs: 1.11.18
+      invariant: 2.2.4
+      mobx: 6.13.7
+      mobx-react-lite: 4.1.0(mobx@6.13.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      stringify-object: 5.0.0
+      styled-components: 6.1.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      tslib: 2.8.1
+    transitivePeerDependencies:
+      - date-fns
+      - luxon
+      - moment
 
   react-base16-styling@0.6.0:
     dependencies:
