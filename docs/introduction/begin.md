@@ -14,12 +14,6 @@ nav:
 
 选择你喜欢的包管理器进行安装：
 
-```bash
-# npm
-npm install react-antd-xform --save
+<InstallDependencies npm='$ npm install react-antd-xform --save' yarn='$ yarn add react-antd-xform' pnpm='$ pnpm add react-antd-xform'></InstallDependencies>
 
-# yarn
-yarn add react-antd-xform
 
-# pnpm
-pnpm add react-antd-xform
