@@ -21,12 +21,23 @@ export function FormSubmit<T extends object = {}>({
     onSubmit,
     onError,
   };
-  return (
-    <ButtonComponent
-      {...(props as T)}
-      onClick={() => modelUtils.submit(model, submitOptions)}
-      children={children}
-      {...props}
-    ></ButtonComponent>
-  );
+  if (ButtonComponent) {
+    return (
+      <ButtonComponent
+        {...(props as T)}
+        onClick={() => modelUtils.submit(model, submitOptions)}
+        children={children}
+        {...props}
+      ></ButtonComponent>
+    );
+  } else {
+    return (
+      <button
+        {...(props as T)}
+        onClick={() => modelUtils.submit(model, submitOptions)}
+        children={children}
+        {...props}
+      ></button>
+    );
+  }
 }
